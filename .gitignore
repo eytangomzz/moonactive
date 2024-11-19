@@ -9,4 +9,5 @@ app/venv/
 !.gitignore
 !*.py
 !Dockerfile
-
+!*.yaml
+!/helm/templates

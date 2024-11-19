@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}
+  labels:
+    app: {{ .Chart.Name }}
+spec:
+  replicas: {{ .Values.deployment.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Chart.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}
+    spec:
+      restartPolicy: {{ .Values.deployment.restartPolicy }}
+      containers:
+      - name: {{ .Chart.Name }}-app
+        image: {{ .Values.deployment.oddApp.repository }}:{{ .Values.deployment.oddApp.tag }}
+        imagePullPolicy: {{ .Values.deployment.oddApp.imagePullPolicy }}
+        ports:
+          - containerPort: {{ .Values.deployment.oddApp.port }}
+        resources:
+          requests:
+            memory: {{quote .Values.deployment.oddApp.requests.memory }}
+            cpu: {{quote .Values.deployment.oddApp.requests.cpu }}
+          limits:
+            memory: {{quote .Values.deployment.oddApp.limits.memory }}
+            cpu: {{quote .Values.deployment.oddApp.limits.cpu }}

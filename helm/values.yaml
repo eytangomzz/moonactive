@@ -1,0 +1,27 @@
+service:
+  type: ClusterIP
+  app_port: 80
+  app_target_port: 5000
+
+ingress:
+  host: oddappmoon.info ##temp name 
+  pathType: Prefix
+  ingressClassName: nginx
+  path: "/"
+  annotations: 
+    rewrite_target: /
+
+deployment:
+  restartPolicy: Always
+  replicas: 1
+  oddApp:
+    repository: "eytangomzz/moonactive"
+    tag: "1"
+    port: 5000
+    imagePullPolicy: IfNotPresent
+    requests:
+      memory: 64Mi
+      cpu: 50m
+    limits:
+      memory: 256Mi
+      cpu: 200
