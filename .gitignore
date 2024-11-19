@@ -8,5 +8,5 @@ app/venv/
 !/app
 !.gitignore
 !*.py
-
+!Dockerfile
 
