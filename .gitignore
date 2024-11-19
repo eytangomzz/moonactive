@@ -3,7 +3,10 @@
 app/venv/
 
 # Allow Folders
-!docker/
-!helm/
-!app/
+!/docker
+!/helm
+!/app
+!.gitignore
+!*.py
+
 
