@@ -65,6 +65,7 @@ jobs:
           REPOSITORY: ${{ secrets.REPOSITORY }}
           REGISTRY: ${{ steps.ecr-login.outputs.registry }}
         run: |
+          IMAGE_TAG=${GITHUB_RUN_NUMBER} 
           AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)
           ECR_URL=$AWS_ACCOUNT_ID.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.REPOSITORY }}
 
