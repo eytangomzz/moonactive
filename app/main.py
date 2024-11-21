@@ -1,20 +1,20 @@
-from flask import Flask, jsonify, make_response
 import random
 import os
+from flask import Flask, jsonify, make_response
 
 app = Flask(__name__)
 
-app_ready = False
+APP_READY = False
 
 
 ## Create the log file on startup
 
 def initialize_app():
-    global app_ready
+    global APP_READY
     file_path = os.path.join(os.path.dirname(__file__), 'odd-logs.txt')
     if not os.path.exists(file_path):
         open(file_path, 'w').close()
-    app_ready = True
+    APP_READY = True
 
 ## Odd function
 @app.route('/odd', methods=['GET'])
@@ -29,10 +29,9 @@ def get_random_odd():
 ## Is app ready
 @app.route('/ready', methods=['GET'])
 def readiness_check():
-    if app_ready:
+    if APP_READY:
         return make_response("Application is ready", 200)
-    else:
-        return make_response("Application is not ready", 503)
+    return make_response("Application is not ready", 503)
 
 ## Dont forget to remove debug=True after app is finished
 if __name__ == '__main__':
