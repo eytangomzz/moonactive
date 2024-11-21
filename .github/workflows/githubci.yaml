@@ -29,6 +29,8 @@ jobs:
   build-and-push:
     name: Build and Push Docker Image to ECR
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
     needs: lint
     steps:
       - name: Checkout Code
@@ -43,6 +45,7 @@ jobs:
       - name: Login to Amazon ECR
         id: ecr-login
         uses: aws-actions/amazon-ecr-login@v2
+
 
       - name: Build and Tag Docker Image
         env:
