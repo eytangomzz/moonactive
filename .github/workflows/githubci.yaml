@@ -71,6 +71,11 @@ jobs:
 
           echo "Pushing Docker image with tag: $IMAGE_TAG to ECR"
           docker push $ECR_URL:$IMAGE_TAG
+          
+      - name: Set up Kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'latest'
 
       - name: Update kube config
         env:

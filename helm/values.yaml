@@ -15,8 +15,8 @@ deployment:
   restartPolicy: Always
   replicas: 1
   oddApp:
-    repository: "eytangomzz/moonactive"
-    tag: "1"
+    repository: ""
+    tag: ""
     port: 5000
     imagePullPolicy: IfNotPresent
     requests:
