@@ -32,7 +32,13 @@ jobs:
     needs: lint
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Login to Amazon ECR
         id: ecr-login
@@ -40,12 +46,12 @@ jobs:
 
       - name: Build and Tag Docker Image
         env:
-          REPO_NAME: your-ecr-repo-name
-          AWS_REGION: your-region
+          REGISTRY: ${{ steps.ecr-login.outputs.registry }}
+          REPOSITORY: ${{ secrets.REPOSITORY }}
         run: |
-          IMAGE_TAG=${GITHUB_RUN_NUMBER}  # Use the build number as the tag
+          IMAGE_TAG=${GITHUB_RUN_NUMBER} 
           AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)
-          ECR_URL=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$REPO_NAME
+          ECR_URL=$AWS_ACCOUNT_ID.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.REPOSITORY }}
 
           echo "Building Docker image with tag: $IMAGE_TAG"
           docker build -t $ECR_URL:$IMAGE_TAG .
