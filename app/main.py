@@ -7,14 +7,13 @@ import os
 from flask import Flask, jsonify, make_response
 
 app = Flask(__name__)
-
-
+APP_READY = False
 
 def initialize_app():
     """ Initialize the app and create log file."""
     file_path = os.path.join(os.path.dirname(__file__), 'odd-logs.txt')
     if not os.path.exists(file_path):
-        with open(file_path, 'w'):
+        with open(file_path, 'w', encoding='utf-8'):
             pass
     return True
 
