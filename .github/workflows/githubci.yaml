@@ -57,7 +57,7 @@ jobs:
           ECR_URL=$AWS_ACCOUNT_ID.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.REPOSITORY }}
 
           echo "Building Docker image with tag: $IMAGE_TAG"
-          docker build -t $ECR_URL:$IMAGE_TAG -f docker/Dockerfile .
+          docker build -t $ECR_URL:$IMAGE_TAG -f app/Dockerfile .
           docker tag $ECR_URL:$IMAGE_TAG $ECR_URL:$IMAGE_TAG
 
       # - name: Push Docker Image to Amazon ECR
