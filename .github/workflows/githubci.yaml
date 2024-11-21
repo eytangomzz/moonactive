@@ -71,3 +71,16 @@ jobs:
 
           echo "Pushing Docker image with tag: $IMAGE_TAG to ECR"
           docker push $ECR_URL:$IMAGE_TAG
+
+      - name: Update kube config
+        env:
+          EKS_CLUSTER_NAME: ${{ secrets.EKS_CLUSTER_NAME }}
+        run: aws eks update-kubeconfig --name $EKS_CLUSTER_NAME --region ${{ secrets.AWS_REGION }}
+      
+      - name: Deploy with Helm
+        run: |
+          helm upgrade --install my-app ./helm \
+            --set image.repository=${{ steps.ecr-login.outputs.registry }}/${{ secrets.REPOSITORY }} \
+            --set image.tag=${GITHUB_RUN_NUMBER} \
+            --namespace moonactive \
+            --create-namespace      
