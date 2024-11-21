@@ -11,3 +11,5 @@ app/venv/
 !Dockerfile
 !*.yaml
 !/helm/templates
+!.github
+!.github/**
