@@ -71,7 +71,8 @@ jobs:
 
           echo "Pushing Docker image with tag: $IMAGE_TAG to ECR"
           docker push $ECR_URL:$IMAGE_TAG
-          
+    
+
       - name: Set up Kubectl
         uses: azure/setup-kubectl@v3
         with:
@@ -81,6 +82,11 @@ jobs:
         env:
           EKS_CLUSTER_NAME: ${{ secrets.EKS_CLUSTER_NAME }}
         run: aws eks update-kubeconfig --name $EKS_CLUSTER_NAME --region ${{ secrets.AWS_REGION }}
+      
+      - name: Debug kubeconfig
+        run: |
+          kubectl config view
+          kubectl get nodes      
       
       - name: Deploy with Helm
         run: |
