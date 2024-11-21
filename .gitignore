@@ -13,3 +13,4 @@ app/venv/
 !/helm/templates
 !.github
 !.github/**
+!reqirements.txt
