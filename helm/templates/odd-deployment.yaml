@@ -12,12 +12,7 @@ spec:
   template:
     metadata:
       labels:
-        app: {{ .Chart.Name }}
-   strategy:
-    type: {{ .Values.deployment.strategy.type }}
-    rollingUpdate:
-      maxUnavailable: {{quote .Values.deployment.strategy.maxUnavailable }}
-      maxSurge: {{quote .Values.deployment.strategy.maxSurge }} 
+        app: {{ .Chart.Name }} 
     spec:
       restartPolicy: {{ .Values.deployment.restartPolicy }}
       containers:
@@ -33,3 +28,8 @@ spec:
           limits:
             memory: {{quote .Values.deployment.oddApp.limits.memory }}
             cpu: {{quote .Values.deployment.oddApp.limits.cpu }}
+  strategy:
+   type: {{ .Values.deployment.strategy.type }}
+   rollingUpdate:
+     maxUnavailable: {{quote .Values.deployment.strategy.maxUnavailable }}
+     maxSurge: {{quote .Values.deployment.strategy.maxSurge }}

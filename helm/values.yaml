@@ -15,8 +15,8 @@ deployment:
   restartPolicy: Always
   replicas: 1
   oddApp:
-    repository: ""
-    tag: ""
+    repository: "422143002123.dkr.ecr.us-east-1.amazonaws.com/moonactive"
+    tag: "23"
     port: 5000
     imagePullPolicy: IfNotPresent
     requests:
