@@ -37,7 +37,6 @@ def readiness_check():
     return make_response("Application is not ready", 503)
 
 
-## Dont forget to remove debug=True after app is finished
 if __name__ == '__main__':
     APP_READY = initialize_app()
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000)
