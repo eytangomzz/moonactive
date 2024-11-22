@@ -78,7 +78,17 @@ jobs:
     needs: build-and-push
     permissions:
       id-token: write
-    steps:      
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: ecr-login
+        uses: aws-actions/amazon-ecr-login@v2
+              
       - name: Set up Kubectl
         uses: azure/setup-kubectl@v3
         with:
