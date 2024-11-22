@@ -15,6 +15,9 @@ spec:
         app: {{ .Chart.Name }} 
     spec:
       restartPolicy: {{ .Values.deployment.restartPolicy }}
+      volumes:
+        - name: {{ .Values.volume.name }}
+          emptyDir: {}
       containers:
       - name: {{ .Chart.Name }}-app
         image: {{ .Values.deployment.oddApp.repository }}:{{ .Values.deployment.oddApp.tag }}
@@ -28,6 +31,28 @@ spec:
           limits:
             memory: {{quote .Values.deployment.oddApp.limits.memory }}
             cpu: {{quote .Values.deployment.oddApp.limits.cpu }}
+        voluneMounts:
+          - name: {{ .Values.volume.name }}
+            mountPath: /app
+      - name: {{ .Chart.Name }}-sidecar
+        image: {{ .Values.deployment.sidecar.repository }}
+        imagePullPolicy: {{ .Values.deployment.sidecar.imagePullPolicy }}
+        resources:
+          requests:
+            memory: {{quote .Values.deployment.sidecar.requests.memory }}
+            cpu: {{quote .Values.deployment.sidecar.requests.cpu }}
+          limits:
+            memory: {{quote .Values.deployment.sidecar.limits.memory }}
+            cpu: {{quote .Values.deployment.sidecar.limits.cpu }}
+        command: {{ toYaml .Values.deployment.sidecar.command | nindent 10 }}
+        voluneMounts:
+          - name: {{ .Values.volume.name }}
+            mountPath: /app
+        livenessProbe:
+          exec:
+            command: { toYaml .Values.deployment.sidecar.livenessProbe.command | nindent 10 }}
+          initialDelaySeconds: {{ .Values.deployment.sidecar.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.deployment.sidecar.livenessProbe.periodSeconds }}
   strategy:
    type: {{ .Values.deployment.strategy.type }}
    rollingUpdate:

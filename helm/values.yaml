@@ -31,6 +31,20 @@ deployment:
     type: RollingUpdate
     maxUnavailable: 0
     maxSurge: 1
+  sidecar:
+    repository: "busybox"
+    imagePullPolicy: IfNotPresent
+    command: ["/bin/sh", "-c", "while true; do if [ -f /app/odd-logs.txt]; then tail -f /app/odd-logs.txt; else exit 1; fi; done"]
+    requests:
+      memory: 64Mi
+      cpu: 50m
+    limits:
+      memory: 256Mi
+      cpu: 200
+    livenessProbe:
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      command: ["/bin/sh","-c", "if [-f /app/odd-logs.txt]; then exit 0; else exit 1; fi"]
 
 hpa:
   minReplicas: 1
@@ -38,3 +52,6 @@ hpa:
   targetCPUUtilizationPercentage: 50
   targetMemoryUtilizationPercentage: 70
 
+volume:
+  name: shared-volume
+  emptyDir: {}
