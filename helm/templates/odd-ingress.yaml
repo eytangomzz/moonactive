@@ -4,7 +4,9 @@ metadata:
   namespace: {{ .Chart.Name }}
   name: {{ .Chart.Name }}-ingress
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: {{ .Values.ingress.annotations.rewrite_target }}
+    alb.ingress.kubernetes.io/group.name: {{ .Values.ingress.annotations.group_name }}
+    alb.ingress.kubernetes.io/scheme: {{ .Values.ingress.annotations.scheme }}
+    alb.ingress.kubernetes.io/target.type: {{ .Values.ingress.annotations.target_type }}
 spec:
   ingressClassName: {{ .Values.ingress.ingressClassName }}
   rules:

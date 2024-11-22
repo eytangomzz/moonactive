@@ -6,10 +6,12 @@ service:
 ingress:
   host: oddappmoon.info ##temp name 
   pathType: Prefix
-  ingressClassName: nginx
+  ingressClassName: alb
   path: "/"
   annotations: 
-    rewrite_target: /
+    group_name: loadbalancer-moon
+    scheme: internet-facing
+    target_type: ip
 
 deployment:
   restartPolicy: Always
