@@ -93,7 +93,7 @@ jobs:
       - name: Login to Amazon ECR
         id: ecr-login
         uses: aws-actions/amazon-ecr-login@v2
-        
+
 
       - name: Set up Kubectl
         uses: azure/setup-kubectl@v3
@@ -104,16 +104,12 @@ jobs:
         env:
           EKS_CLUSTER_NAME: ${{ secrets.EKS_CLUSTER_NAME }}
         run: aws eks update-kubeconfig --name $EKS_CLUSTER_NAME --region ${{ secrets.AWS_REGION }}
-      
-      - name: Debug kubeconfig
-        run: |
-          kubectl config view
-          kubectl get nodes      
+            
       
       - name: Deploy with Helm
         run: |
           helm upgrade --install my-app ./helm \
-            --set image.repository=${{ steps.ecr-login.outputs.registry }}/${{ secrets.REPOSITORY }} \
-            --set image.tag=${GITHUB_RUN_NUMBER} \
+            --set deployment.oddApp.repository=${{ steps.ecr-login.outputs.registry }}/${{ secrets.REPOSITORY }} \
+            --set deployment.oddApp.tag=${GITHUB_RUN_NUMBER} \
             --namespace moonactive \
             --create-namespace      
