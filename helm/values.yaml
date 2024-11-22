@@ -37,7 +37,7 @@ deployment:
     command: 
       - "/bin/sh"
       - "-c"
-      - "while true; do if [ -f /app/odd-logs.txt ]; then tail -f /app/odd-logs.txt; else exit 1; fi; done"
+      - "while true; do if [ -f odd-logs.txt ]; then tail -f odd-logs.txt; else exit 1; fi; done"
     requests:
       memory: 64Mi
       cpu: 50m
@@ -50,7 +50,7 @@ deployment:
       command: 
         - "/bin/sh"
         - "-c"
-        - "if [ -f /app/odd-logs.txt ]; then exit 0; else exit 1; fi"
+        - "if [ -f odd-logs.txt ]; then exit 0; else exit 1; fi"
 
 hpa:
   minReplicas: 1
