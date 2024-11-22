@@ -31,9 +31,10 @@ spec:
           limits:
             memory: {{quote .Values.deployment.oddApp.limits.memory }}
             cpu: {{quote .Values.deployment.oddApp.limits.cpu }}
-        voluneMounts:
+        volumeMounts:
           - name: {{ .Values.volume.name }}
             mountPath: /app
+
       - name: {{ .Chart.Name }}-sidecar
         image: {{ .Values.deployment.sidecar.repository }}
         imagePullPolicy: {{ .Values.deployment.sidecar.imagePullPolicy }}
@@ -44,13 +45,15 @@ spec:
           limits:
             memory: {{quote .Values.deployment.sidecar.limits.memory }}
             cpu: {{quote .Values.deployment.sidecar.limits.cpu }}
-        command: {{ toYaml .Values.deployment.sidecar.command | nindent 10 }}
-        voluneMounts:
+        command: 
+          {{- toYaml .Values.deployment.sidecar.command | nindent 12 }}
+        volumeMounts:
           - name: {{ .Values.volume.name }}
             mountPath: /app
         livenessProbe:
           exec:
-            command: { toYaml .Values.deployment.sidecar.livenessProbe.command | nindent 10 }}
+            command: 
+              {{- toYaml .Values.deployment.sidecar.livenessProbe.command | nindent 12 }}
           initialDelaySeconds: {{ .Values.deployment.sidecar.livenessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.deployment.sidecar.livenessProbe.periodSeconds }}
   strategy:
