@@ -4,7 +4,7 @@ service:
   app_target_port: 5000
 
 ingress:
-  host: oddappmoon.info ##temp name 
+  host: oddappmoon.info.com ##temp name 
   pathType: Prefix
   ingressClassName: alb
   path: "/"
