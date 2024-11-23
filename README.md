@@ -137,7 +137,7 @@ If you have a DNS provider you can access it using the ingress, just change the 
 ### Using Port Forwarding
 
 Login to the cluster ```aws eks --region your-cluster-region update-kubeconfig --name cluster-name``` if not configured already
-To access the application locally you can use portforwarding ```kubectl port-forward -n moonactive svc/moonactive-service 8090:80 (it will forward the traffic to port 5000 inside the container)
+To access the application locally you can use portforwarding ```kubectl port-forward -n moonactive svc/moonactive-service 8090:80``` (it will forward the traffic to port 5000 inside the container)
 Then you are able to access the container locally on localhost:8090/ready or any other endpoint 
 
 ### Deployment
