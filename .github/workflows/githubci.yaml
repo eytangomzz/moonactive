@@ -61,8 +61,8 @@ jobs:
       #     docker tag $ECR_URL:$IMAGE_TAG $ECR_URL:$IMAGE_TAG
       - name: Build Application Docker image
         run: |
-          docker build -f /app/Dockerfile -t ${{ secrets.REPOSITORY }}:${{ github.run_number }} .
-          docker build -f /app/Dockerfile.test -t test-image .
+          docker build -f app/Dockerfile -t ${{ secrets.REPOSITORY }}:${{ github.run_number }} .
+          docker build -f app/Dockerfile.test -t test-image .
   
       - name: Run Test
         run: |
