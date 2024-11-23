@@ -17,9 +17,6 @@ jobs:
       with:
         python-version: "3.12"
         
-    # - name: Install dependencies
-    #   run: |
-    #     pip install pylint flask requests
     - name: Cache Python Dependencies
       uses: actions/cache@v3
       with:
@@ -50,7 +47,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
-          aws-region: ${{ secrets.AWS_REGION }}
+          aws-region: ${{ vars.AWS_REGION }}
 
       - name: Login to Amazon ECR
         id: ecr-login
@@ -58,12 +55,11 @@ jobs:
 
       - name: Build Image 
         run: |
-          docker build -t ${{ secrets.REPOSITORY }}:${{ github.run_number }} -f app/Dockerfile .
-          docker run -d --rm -p 5000:5000 --name test-app ${{ secrets.REPOSITORY }}:${{ github.run_number }}
+          docker build -t ${{ vars.REPOSITORY }}:${{ github.run_number }} -f app/Dockerfile .
+          docker run -d --rm -p 5000:5000 --name test-app ${{ vars.REPOSITORY }}:${{ github.run_number }}
 
       - name: Run Application Tests
         run: |
-          # pip install pytest requests
           pip install -r app/requirements.txt
           pytest app/test.py
         env:
@@ -71,12 +67,12 @@ jobs:
 
       - name: Push Docker Image to Amazon ECR
         env:
-          REPOSITORY: ${{ secrets.REPOSITORY }}
+          REPOSITORY: ${{ vars.REPOSITORY }}
           REGISTRY: ${{ steps.ecr-login.outputs.registry }}
         run: |
           echo "Pushing Docker image with tag: $IMAGE_TAG to ECR"
-          docker tag ${{ secrets.REPOSITORY }}:${{ github.run_number }} ${{ steps.ecr-login.outputs.registry }}/${{ secrets.REPOSITORY }}:${{ github.run_number }}
-          docker push ${{ steps.ecr-login.outputs.registry }}/${{ secrets.REPOSITORY }}:${{ github.run_number }}
+          docker tag ${{ vars.REPOSITORY }}:${{ github.run_number }} ${{ steps.ecr-login.outputs.registry }}/${{ vars.REPOSITORY }}:${{ github.run_number }}
+          docker push ${{ steps.ecr-login.outputs.registry }}/${{ vars.REPOSITORY }}:${{ github.run_number }}
     
   deploy:
     name: Deploy the application using helm
@@ -93,7 +89,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
-          aws-region: ${{ secrets.AWS_REGION }}
+          aws-region: ${{ vars.AWS_REGION }}
 
 
       - name: Login to Amazon ECR
@@ -108,14 +104,14 @@ jobs:
 
       - name: Update kube config
         env:
-          EKS_CLUSTER_NAME: ${{ secrets.EKS_CLUSTER_NAME }}
-        run: aws eks update-kubeconfig --name $EKS_CLUSTER_NAME --region ${{ secrets.AWS_REGION }}
+          EKS_CLUSTER_NAME: ${{ vars.EKS_CLUSTER_NAME }}
+        run: aws eks update-kubeconfig --name $EKS_CLUSTER_NAME --region ${{ vars.AWS_REGION }}
             
       
       - name: Deploy with Helm
         run: |
           helm upgrade --install my-app ./helm \
-            --set deployment.oddApp.repository=${{ steps.ecr-login.outputs.registry }}/${{ secrets.REPOSITORY }} \
+            --set deployment.oddApp.repository=${{ steps.ecr-login.outputs.registry }}/${{ vars.REPOSITORY }} \
             --set deployment.oddApp.tag=${GITHUB_RUN_NUMBER} \
             --namespace moonactive \
             --create-namespace      
