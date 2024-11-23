@@ -4,6 +4,6 @@ WORKDIR /test
 
 RUN pip install pytest requests
 
-COPY app/test_main.py .
+COPY test_main.py .
 
-CMD ["pytest", "test_main.py"]
+CMD sleep 10 && pytest test_main.py

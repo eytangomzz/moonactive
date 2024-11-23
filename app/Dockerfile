@@ -2,10 +2,12 @@ FROM python:3.9-slim
 
 WORKDIR /app
 
-COPY app/requirements.txt . 
+RUN mkdir /logs
+
+COPY requirements.txt . 
 
 RUN pip install -r requirements.txt
 
-COPY app/main.py .
+COPY main.py .
 
 CMD ["python", "main.py"]

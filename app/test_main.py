@@ -4,7 +4,7 @@ Test for the app
 
 import requests
 
-BASE_URL = "http://localhost:5000"
+BASE_URL = "http://app:5000"
 
 def test_ready_endpoint():
     """Test the readiness endpoint."""
@@ -12,7 +12,8 @@ def test_ready_endpoint():
     assert response.status_code in [200, 503], "Unexpected status code for /ready"
     if response.status_code == 200:
         assert response.text == "Application is ready"
-    assert response.text == "Application is not ready"
+    else:
+        assert response.text == "Application is not ready"
 
 def test_odd_endpoint():
     """Test the odd number generation endpoint."""
