@@ -47,44 +47,30 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v2
 
 
-      # - name: Build and Tag Docker Image
-      #   env:
-      #     REGISTRY: ${{ steps.ecr-login.outputs.registry }}
-      #     REPOSITORY: ${{ secrets.REPOSITORY }}
-      #   run: |
-      #     IMAGE_TAG=${GITHUB_RUN_NUMBER} 
-      #     AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)
-      #     ECR_URL=$AWS_ACCOUNT_ID.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.REPOSITORY }}
-
-      #     echo "Building Docker image with tag: $IMAGE_TAG"
-      #     docker build -t $ECR_URL:$IMAGE_TAG -f app/Dockerfile .
-      #     docker tag $ECR_URL:$IMAGE_TAG $ECR_URL:$IMAGE_TAG
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
-      - name: Build Application Docker image
+      - name: Build and Tag Docker Image
+        env:
+          REGISTRY: ${{ steps.ecr-login.outputs.registry }}
+          REPOSITORY: ${{ secrets.REPOSITORY }}
         run: |
-          docker build -f app/Dockerfile -t ${{ secrets.REPOSITORY }}:${{ github.run_number }} .
-          docker build -f app/Dockerfile.test -t test-image .
-          docker-compose -f docker-compose.yml up --build --abort-on-container-exit
-  
-      # - name: Run Test
-      #   run: |
-      #     docker network create test-network
-      #     docker run -d --rm --network test-network --name test-app \
-      #       -p 5000:5000 ${{ secrets.REPOSITORY }}:${{ github.run_number }}
-      #     sleep 5
-      #     docker run --rm --network test-network test-image
-      #   env:
-      #     BASE_URL: http://test-app:5000
+          IMAGE_TAG=${GITHUB_RUN_NUMBER} 
+          AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)
+          ECR_URL=$AWS_ACCOUNT_ID.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.REPOSITORY }}
+
+          echo "Building Docker image with tag: $IMAGE_TAG"
+          docker build -t $ECR_URL:$IMAGE_TAG -f app/Dockerfile .
+          docker tag $ECR_URL:$IMAGE_TAG $ECR_URL:$IMAGE_TAG
 
       - name: Push Docker Image to Amazon ECR
         env:
           REPOSITORY: ${{ secrets.REPOSITORY }}
           REGISTRY: ${{ steps.ecr-login.outputs.registry }}
         run: |
-          docker tag ${{ secrets.REPOSITORY }}:${{ github.run_number }} ${{ steps.ecr-login.outputs.registry }}/${{ secrets.REPOSITORY }}:${{ github.run_number }}
-          docker push ${{ steps.ecr-login.outputs.registry }}/${{ secrets.REPOSITORY }}:${{ github.run_number }}
+          IMAGE_TAG=${GITHUB_RUN_NUMBER} 
+          AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)
+          ECR_URL=$AWS_ACCOUNT_ID.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.REPOSITORY }}
+
+          echo "Pushing Docker image with tag: $IMAGE_TAG to ECR"
+          docker push $ECR_URL:$IMAGE_TAG
     
   deploy:
     name: Deploy the application using helm
