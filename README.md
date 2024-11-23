@@ -117,7 +117,12 @@ To access the grafana Ive used port-forward, If you have a DNS provider you can 
 
 For this exercise Ive used a imported dashboard by the number 15760, Because the stack comes imbedded your prometheus stream is already configured, but other wise you should first go to the data Source -> Add new connection -> Prometheus -> Insert promethus server URL
 
-![Alt text](images/grafana.png)
+This is the Dashboard on the moonactive namespace with one pod and 2 containers inside the pod
+![Alt text](images/grafanapod.png)
+
+This is the dashboard of the kube-system namespace
+
+![Alt text](images/grafanakubesystem.png)
 
 ### GitHub Actions Workflow
 In this project ive used github secrets to save the following secrets to run the github actions workflow:
