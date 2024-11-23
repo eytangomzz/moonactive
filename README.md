@@ -117,7 +117,7 @@ To access the grafana Ive used port-forward, If you have a DNS provider you can 
 
 For this exercise Ive used a imported dashboard by the number 15760, Because the stack comes imbedded your prometheus stream is already configured, but other wise you should first go to the data Source -> Add new connection -> Prometheus -> Insert promethus server URL
 
-##### Insert image here of Dashboard
+![Alt text](images/grafana.png)
 
 ### GitHub Actions Workflow
 In this project ive used github secrets to save the following secrets to run the github actions workflow:
@@ -153,6 +153,15 @@ The deployment consist of the following:
    2. The second container consists of the following logic: If the file odd-logs.txt exists on the container it will be created and tail that file to stdout, It has a liveness probe that will restart that container if the file gets deleted, and will recreate only if the file will be creatd again
       To achive that we need to mount a volume (For this purpose ive used emprtyDir that lives only as long as the pods lives) and mounted both pods to the same dir
    3. Rolling update with 0 maxUnavaiable to be as resiliant as possible during updates 
-      
+
+```k get pods -A```
+![Alt text](images/pods2.png)
+
+```k get ing -A```
+![Alt text](images/inggress.png)
+
+```k get all -A``` only showed the bottom of the command as the upper values are deployments and svc
+![Alt text](images/hpa.png)
+
 
 
