@@ -48,7 +48,7 @@ jobs:
 
       - name: Build Image
         run: |
-          docker build -t ${{ secrets.REPOSITORY }}:${{ github.run_number }} .
+          docker build -t ${{ secrets.REPOSITORY }}:${{ github.run_number }} -f app/Dockerfile .
 
       - name: Run Application Tests
         run: |
