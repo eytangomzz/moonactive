@@ -9,15 +9,14 @@ jobs:
   lint:
     name: Lint Code
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ["3.12"]
     steps:
     - uses: actions/checkout@v4
-    - name: Set up Python ${{ matrix.python-version }}
+
+    - name: Set up Python
       uses: actions/setup-python@v3
       with:
-        python-version: ${{ matrix.python-version }}
+        python-version: "3.12"
+        
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
@@ -66,7 +65,7 @@ jobs:
           REPOSITORY: ${{ secrets.REPOSITORY }}
           REGISTRY: ${{ steps.ecr-login.outputs.registry }}
         run: |
-        
+
           echo "Pushing Docker image with tag: $IMAGE_TAG to ECR"
           docker tag ${{ secrets.REPOSITORY }}:${{ github.run_number }} ${{ steps.ecr-login.outputs.registry }}/${{ secrets.REPOSITORY }}:${{ github.run_number }}
           docker push ${{ steps.ecr-login.outputs.registry }}/${{ secrets.REPOSITORY }}:${{ github.run_number }}
