@@ -46,6 +46,19 @@ jobs:
         id: ecr-login
         uses: aws-actions/amazon-ecr-login@v2
 
+      - name: Build Image
+        run: |
+          docker build -t ${{ secrets.REPOSITORY }}:${{ github.run_number }} .
+          
+      - name: Run Application Tests
+        run: |
+          docker run -d --rm -p 5000:5000 --name test-app ${{ secrets.REPOSITORY }}:${{ github.run_number }}
+          sleep 5  # Wait for the app to start
+          pip install pytest requests
+          pytest test_app.py
+        env:
+          BASE_URL: http://localhost:5000
+
 
       - name: Build and Tag Docker Image
         env:
