@@ -14,3 +14,4 @@ app/venv/
 !.github
 !.github/**
 !reqirements.txt
+!Dockerfile.test

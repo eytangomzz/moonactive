@@ -1,0 +1,7 @@
+FROM python:3.9-slim
+
+RUN pip install pytest requests
+
+COPY test_main.py /tests/test_main.py
+
+CMD ["pytest", "/tests/test_main.py"]
