@@ -61,12 +61,12 @@ jobs:
       #     docker tag $ECR_URL:$IMAGE_TAG $ECR_URL:$IMAGE_TAG
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
-        
+
       - name: Build Application Docker image
         run: |
           docker build -f app/Dockerfile -t ${{ secrets.REPOSITORY }}:${{ github.run_number }} .
           docker build -f app/Dockerfile.test -t test-image .
-          docker compose up --abort-on-container-exit
+          docker-compose -f docker-compose.yml up --build --abort-on-container-exit
   
       # - name: Run Test
       #   run: |
