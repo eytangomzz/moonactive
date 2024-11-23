@@ -55,7 +55,7 @@ jobs:
           docker run -d --rm -p 5000:5000 --name test-app ${{ secrets.REPOSITORY }}:${{ github.run_number }}
           sleep 5  # Wait for the app to start
           pip install pytest requests
-          pytest test.py
+          pytest app/test.py
         env:
           BASE_URL: http://localhost:5000
 
