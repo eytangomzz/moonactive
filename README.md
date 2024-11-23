@@ -42,7 +42,6 @@ To create an EKS cluster, follow these steps:
      aws eks update-kubeconfig --name my-cluster --region your-region
      ```
 Or use the aws console, make sure to add IAM access entries for the github runner role to be able to deploy the helm of the application, and to add the assumed role for your user to access the cluster as well
-For this project Ive used 1 nodegroup containing 3 ec2 machines due to the capacity of ip`s that each machine can assign vs my workload (ALB controller and promethus and grafana number of pods)
 ### Create IAM Roles and Policies
 
 Ensure you have the necessary IAM roles and policies for EKS and AWS services. These roles include permissions for creating and managing resources like ECR and EKS clusters, as well as for interacting with the Kubernetes cluster.
