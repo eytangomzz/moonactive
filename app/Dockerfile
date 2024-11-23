@@ -4,10 +4,10 @@ WORKDIR /app
 
 RUN mkdir /logs
 
-COPY requirements.txt . 
+COPY app/requirements.txt . 
 
 RUN pip install -r requirements.txt
 
-COPY main.py .
+COPY app/main.py .
 
 CMD ["python", "main.py"]
